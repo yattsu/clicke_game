@@ -171,9 +171,6 @@ body {
   flex: 0.2;
 }
 
-.item .status {
-}
-
 .item .price {
   width: 100%;
   text-align: right;
