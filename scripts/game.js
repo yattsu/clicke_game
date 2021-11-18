@@ -52,11 +52,16 @@ class Game {
     }
   }
 
+  saveGameObject() {
+    localStorage.setItem('gameObject', JSON.stringify(this));
+  }
+
   everySecond() {
     setInterval(() => {
       this.updateScore();
       this.passiveIncrement();
       this.checkPrices();
+      this.saveGameObject();
     }, 1000);
   }
 
@@ -201,3 +206,9 @@ class floatingText {
 }
 
 let game = new Game();
+let savedGame = JSON.parse(localStorage.getItem('gameObject'));
+if (savedGame) {
+  game.score = savedGame.score;
+  game.multipliers = savedGame.multipliers;
+  game.settings = savedGame.settings;
+}
