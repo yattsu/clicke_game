@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Clicker</title>
+    <link rel='stylesheet' type='text/css' href='home.css'>
+  </head>
+  <body>
+    <div class='main'>
+      <div class='dots_pattern'></div>
+      <div class='combo_overlay'></div>
+      <div class='game_area'>
+        <div class='score twitch'>Click the cat!</div>
+        <div class='character'>
+          <img draggable='false' src='media/character.png'>
+          <audio class='tap' src='media/audio/tap.wav'></audio>
+        </div>
+      </div>
+      <div class='shop'>
+        <div class='title'>Shop</div>
+        <div class='items'>
+          <div id='click' class='item'>
+            <div class='title'>Points per click</div>
+            <div class='status'>
+              Current: NaN 
+              Next: NaN 
+            </div>
+            <div class='price'>NaN</div>
+            <button class='purchase disabled'>Buy</button>
+          </div>
+          <div id='second' class='item'>
+            <div class='title'>Points per second</div>
+            <div class='status'>
+              Current: NaN 
+              Next: NaN 
+            </div>
+            <div class='price'>NaN</div>
+            <button class='purchase disabled'>Buy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src='scripts/game.js'></script>
+    <script src='scripts/interface.js'></script>
+  </body>
+</html>

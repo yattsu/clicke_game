@@ -1,0 +1,263 @@
+@font-face {
+  font-family: "Pacifico";
+  src: url("fonts/Pacifico-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("fonts/Raleway-Regular.ttf");
+}
+
+@keyframes twitch {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes floatingText {
+  from {
+  }
+  to {
+    transform: translateY(-500%) scale(0.3);
+    filter: opacity(0);
+  }
+}
+
+@keyframes tilt {
+  0% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+  100% {
+    transform: rotate(-4deg);
+  }
+}
+
+* {
+  user-select: none;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-family: "Pacifico";
+  background: radial-gradient(
+    circle,
+    rgba(210, 115, 139, 1) 0%,
+    rgba(191, 120, 94, 1) 100%
+  );
+}
+
+.floating_text {
+  position: absolute;
+  pointer-events: none;
+  background: linear-gradient(rgb(236, 109, 140) 50%, rgb(235, 131, 94) 100%);
+  color: #eee;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.5);
+  text-shadow: 3px 2px 0px rgba(0, 0, 0, 0.4);
+  font-size: 3vh;
+  left: 50%;
+  top: 50%;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: #ff0000;
+  border: 0px solid;
+  border-radius: 10px;
+  transform: translateX(-50%);
+  animation-name: floatingText;
+  animation-duration: 1.5s;
+  animation-timing-function: linear;
+  z-index: 1;
+}
+
+.game_area {
+  display: flex;
+  flex: 1;
+  height: 75%;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.combo_overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(253, 28, 77, 0.8);
+  filter: opacity(0);
+  z-index: 0;
+}
+
+.shop {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(249, 211, 227, 0.5),
+    rgba(224, 190, 206, 0.7)
+  );
+  flex: 0;
+  transition: all 0.7s;
+  box-shadow: -10px 0px 20px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.shop > .title {
+  flex: 0;
+  color: #eee;
+  cursor: pointer;
+  font-size: 6vh;
+  text-align: center;
+  transform: rotate(-90deg);
+  transition: all 0.1s;
+  text-shadow: 3px 5px 0px rgb(172, 93, 112);
+  z-index: 1;
+}
+
+.shop > .title:hover {
+  transform: rotate(-90deg) scale(1.1);
+}
+
+.shop .items {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+  filter: opacity(0);
+  font-family: "Raleway";
+  flex: 1;
+  height: 50%;
+  align-items: center;
+  transition: all 0.5s;
+}
+
+.items .item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  font-size: 2.3vh;
+  color: #eee;
+  text-align: right;
+}
+
+.item .title {
+  font-size: 2.5vh;
+  flex: 0.2;
+}
+
+.item .status {
+}
+
+.item .price {
+  width: 100%;
+  text-align: right;
+}
+
+.item .purchase {
+  pointer-events: all;
+  cursor: pointer;
+  font-size: 2vh;
+  flex: 0;
+  color: #eee;
+  font-family: "Raleway";
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 40%;
+  border-radius: 50px;
+  border: 2px solid #f5efa2;
+  background: linear-gradient(to top, #4ad15a, #f5efa2);
+  box-shadow: 0px 5px 5px rgb(255 252 210 / 42%);
+}
+
+.item .purchase:hover {
+  filter: brightness(1.2);
+}
+
+.item .purchase:active {
+  transform: translateY(3px);
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed !important;
+  filter: saturate(0);
+  transform: translateY(0) !important;
+}
+
+.disabled:hover {
+  filter: saturate(0) brightness(1) !important;
+}
+
+.twitch {
+  animation-name: twitch;
+  animation-duration: 0.08s;
+}
+
+.main .score {
+  flex: 0.8;
+  font-size: 8vh;
+  color: #eee;
+  text-shadow: 3px 5px 0px rgb(172, 93, 112);
+}
+
+.main .character {
+  flex: 2;
+  animation-name: tilt;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+}
+
+.main .dots_pattern {
+  position: absolute;
+  background-image: url("media/dots_pattern2.png");
+  background-position: center;
+  background-size: 200px;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: soft-light;
+  z-index: 1;
+}
+
+.main .character img {
+  cursor: pointer;
+  transform: scale(1);
+  transition: transform 0.15s;
+}
+
+.main .character img:hover {
+  transform: scale(1.05);
+}
+
+.main .character img:active {
+  transform: scale(1.15);
+}
