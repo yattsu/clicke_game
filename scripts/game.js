@@ -209,7 +209,7 @@ class Game {
     this.rampageBonus += this.multipliers.click;
 
     let timeSpent = 0;
-    let timeAvailable = 10;
+    let timeAvailable = 3 * 60;
 
     let interval = setInterval(() => {
       timeSpent++;
