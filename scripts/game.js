@@ -152,28 +152,30 @@ class Game {
   updatePrices() {
     const items = document.querySelectorAll('.shop .items');
 
-    for (let i = 0; i < items[0].children.length; i++) {
-      const item = items[0].children[i];
-      const id = item.id;
-      const status = item.querySelector('.status');
-      const priceObj = item.querySelector('.price');
-      const button = item.querySelector('.purchase');
+    for (let x = 0; x < items.length; x++) {
+      for (let i = 0; i < items[x].children.length; i++) {
+        const item = items[x].children[i];
+        const id = item.id;
+        const status = item.querySelector('.status');
+        const priceObj = item.querySelector('.price');
+        const button = item.querySelector('.purchase');
 
-      const price = this.calculatePrice(id);
-      const nextPrice = this.multipliers[id] == 0 ? this.formatPts((this.multipliers[id] + 1) * 2) : this.formatPts(this.multipliers[id] * 2);
+        const price = this.calculatePrice(id);
+        const nextPrice = this.multipliers[id] == 0 ? this.formatPts((this.multipliers[id] + 1) * 2) : this.formatPts(this.multipliers[id] * 2);
 
-      if (this.score < price) {
-        button.classList.add('disabled');
-      } else {
-        button.classList.remove('disabled');
+        if (this.score < price) {
+          button.classList.add('disabled');
+        } else {
+          button.classList.remove('disabled');
+        }
+
+        priceObj.innerHTML = `${this.formatPts(price)} pts`;
+
+        if (!status) {
+          continue;
+        }
+        status.innerHTML = `Current: ${this.formatPts(this.multipliers[id])}<br> Next: ${nextPrice}`;
       }
-
-      priceObj.innerHTML = `Price: ${this.formatPts(price)} pts`;
-
-      if (!status) {
-        continue;
-      }
-      status.innerHTML = `Current: ${this.formatPts(this.multipliers[id])}<br> Next: ${nextPrice}`;
     }
   }
 
@@ -201,6 +203,11 @@ class Game {
   }
 
   enableRampage() {
+    if (this.rampage) {
+      return;
+    }
+    this.rampage = true;
+
     document.querySelector('.rampage_overlay').style.filter = 'opacity(1)';
     document.querySelector('.mlg_glasses').style.transform = 'translate(-78%, 44%) rotate(3deg)';
     document.querySelector('.mlg_glasses').style.filter = 'opacity(1)';
@@ -221,6 +228,8 @@ class Game {
   }
 
   disableRampage() {
+    this.rampage = false;
+
     document.querySelector('.rampage_overlay').style.filter = 'opacity(0)';
     document.querySelector('.mlg_glasses').style.transform = 'translate(-78%, 0%) rotate(3deg)';
     document.querySelector('.mlg_glasses').style.filter = 'opacity(0)';
