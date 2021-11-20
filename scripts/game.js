@@ -5,13 +5,17 @@ class Game {
     this.purchaseButtons = document.querySelectorAll('.purchase');
     this.combo = 0;
     this.score = 0;
+    this.rampage = false;
+    this.rampageBonus = 0;
     this.multipliers = {
       click: 1,
-      second: 0 
+      second: 0,
+      rampage: 2 
     };
     this.prices = {
       click: 2.5,
-      second: 1.7 
+      second: 1.7,
+      rampage: 0.5 
     };
     this.settings = {
       tapSound: true,
@@ -60,9 +64,14 @@ class Game {
     setInterval(() => {
       this.updateScore();
       this.passiveIncrement();
-      this.checkPrices();
+      this.updatePrices();
       this.saveGameObject();
+      this.updatePageTitle();
     }, 1000);
+  }
+
+  updatePageTitle() {
+    document.title = this.formatPts(this.score + ' pts');
   }
 
   updateScore() {
@@ -100,12 +109,12 @@ class Game {
   }
 
   click = (event) => {
-    this.incrementScore(this.multipliers.click);
+    this.incrementScore(this.multipliers.click + this.rampageBonus);
     this.comboAdd();
 
     let clientX = event.clientX;
     let clientY = event.clientY;
-    const floatingElement = new floatingText('+' + this.multipliers.click, clientX, clientY);
+    const floatingElement = new floatingText('+' + (this.multipliers.click + this.rampageBonus), clientX, clientY);
   }
 
   playTap = (event) => {
@@ -118,8 +127,20 @@ class Game {
     tapObj.play();
   }
 
+  flooredPow(x, y) {
+    return Math.floor(Math.pow(x, y));
+  }
+
   calculatePrice(id) {
-    let price = Math.floor(Math.pow(this.multipliers[id], this.prices[id]));
+    let price;
+
+    switch (id) {
+      case 'rampage':
+        price = Math.floor(this.score * this.prices[id]);
+        break;
+      default:
+        price = this.flooredPow(this.multipliers[id], this.prices[id]);
+    }
 
     if (this.multipliers[id] == 0) {
       price = 1;
@@ -128,29 +149,31 @@ class Game {
     return price;
   }
 
-  checkPrices() {
+  updatePrices() {
     const items = document.querySelectorAll('.shop .items');
 
     for (let i = 0; i < items[0].children.length; i++) {
       const item = items[0].children[i];
       const id = item.id;
-      const status = item.children[1];
-      const priceObj = item.children[2];
-      const button = item.children[3];
+      const status = item.querySelector('.status');
+      const priceObj = item.querySelector('.price');
+      const button = item.querySelector('.purchase');
 
       const price = this.calculatePrice(id);
+      const nextPrice = this.multipliers[id] == 0 ? this.formatPts((this.multipliers[id] + 1) * 2) : this.formatPts(this.multipliers[id] * 2);
 
-      priceObj.innerHTML = `Price: ${this.formatPts(price)} pts`;
-      if (this.multipliers[id] == 0) {
-        status.innerHTML = `Current: ${this.formatPts(this.multipliers[id])}<br> Next: ${this.formatPts((this.multipliers[id] + 1) * 2)}`;
-      } else {
-        status.innerHTML = `Current: ${this.formatPts(this.multipliers[id])}<br> Next: ${this.formatPts(this.multipliers[id] * 2)}`;
-      }
       if (this.score < price) {
         button.classList.add('disabled');
       } else {
         button.classList.remove('disabled');
       }
+
+      priceObj.innerHTML = `Price: ${this.formatPts(price)} pts`;
+
+      if (!status) {
+        continue;
+      }
+      status.innerHTML = `Current: ${this.formatPts(this.multipliers[id])}<br> Next: ${nextPrice}`;
     }
   }
 
@@ -167,7 +190,48 @@ class Game {
       this.multipliers[id]++;
     }
 
-    this.multipliers[id] *= 2;
+    switch (id) {
+      case 'rampage':
+        this.enableRampage();
+        break;
+      default:
+        this.multipliers[id] *= 2;
+        break;
+    }
+  }
+
+  enableRampage() {
+    document.querySelector('.rampage_overlay').style.filter = 'opacity(1)';
+    document.querySelector('.mlg_glasses').style.transform = 'translate(-78%, 44%) rotate(3deg)';
+    document.querySelector('.mlg_glasses').style.filter = 'opacity(1)';
+
+    this.rampageBonus += this.rampageBonus;
+    this.rampageBonus += this.multipliers.click;
+
+    let timeSpent = 0;
+    let timeAvailable = 10;
+
+    let interval = setInterval(() => {
+      timeSpent++;
+      if (timeSpent > timeAvailable) {
+        this.disableRampage();
+        clearInterval(interval);
+      }
+    }, 1000);
+  }
+
+  disableRampage() {
+    document.querySelector('.rampage_overlay').style.filter = 'opacity(0)';
+    document.querySelector('.mlg_glasses').style.transform = 'translate(-78%, 0%) rotate(3deg)';
+    document.querySelector('.mlg_glasses').style.filter = 'opacity(0)';
+
+    let timeSpent = 0;
+    this.rampageBonus -= this.multipliers.click;
+    this.rampageBonus -= this.rampageBonus;
+    if (this.rampageBonus < 0) {
+      this.rampageBonus = 0;
+    }
+    return;
   }
 }
 

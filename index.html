@@ -2,15 +2,18 @@
   <head>
     <title>Clicker</title>
     <link rel='stylesheet' type='text/css' href='index.css'>
+    <link rel="icon" type="image/x-icon" href='media/favicon.ico'>
   </head>
   <body>
     <div class='main'>
       <div class='dots_pattern'></div>
       <div class='combo_overlay'></div>
+      <div class='rampage_overlay'></div>
       <div class='game_area'>
         <div class='score twitch'>Click the cat!</div>
         <div class='character'>
-          <img draggable='false' src='media/character.png'>
+          <img draggable='false' class='character_img' src='media/character.png'>
+          <img draggable='false' class='mlg_glasses' src='media/mlg_glasses.png'>
           <audio class='tap' src='media/audio/tap.wav'></audio>
         </div>
       </div>
@@ -23,6 +26,11 @@
               Current: NaN 
               Next: NaN 
             </div>
+            <div class='price'>NaN</div>
+            <button class='purchase disabled'>Buy</button>
+          </div>
+          <div id='rampage' class='item'>
+            <div class='title'>Rampage mode (x2 current click)</div>
             <div class='price'>NaN</div>
             <button class='purchase disabled'>Buy</button>
           </div>

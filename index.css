@@ -20,6 +20,17 @@
   }
 }
 
+@keyframes mlg-slide {
+  from {
+    filter: opacity(0);
+    transform: translate(-78%, 0%) rotate(3deg);
+  }
+  to {
+    filter: opacity(1);
+    transform: translate(-78%, 44%) rotate(3deg);
+  }
+}
+
 @keyframes floatingText {
   from {
   }
@@ -108,6 +119,18 @@ body {
   z-index: 0;
 }
 
+.rampage_overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 225, 255, 0.8);
+  filter: opacity(0);
+  transition: filter 0.5s;
+  z-index: 0;
+}
+
 .shop {
   display: flex;
   position: relative;
@@ -144,14 +167,14 @@ body {
 .shop .items {
   display: flex;
   position: absolute;
-  left: 50%;
+  right: 5%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   flex-direction: column;
   filter: opacity(0);
   font-family: "Raleway";
   flex: 1;
-  height: 50%;
+  height: 75%;
   align-items: center;
   transition: all 0.5s;
 }
@@ -245,16 +268,39 @@ body {
   z-index: 1;
 }
 
-.main .character img {
+.main .character .character_img {
   cursor: pointer;
   transform: scale(1);
   transition: transform 0.15s;
 }
 
-.main .character img:hover {
+.main .character .character_img:hover {
   transform: scale(1.05);
 }
 
-.main .character img:active {
+.main .character .character_img:active {
   transform: scale(1.15);
+}
+
+.main .character .mlg_glasses {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  filter: opacity(0);
+  transform: translate(-78%, 44%) rotate(3deg);
+  width: 45%;
+  animation-name: ;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+  transition: all 0.15s !important;
+}
+
+.main .character .character_img:hover + .mlg_glasses {
+  transform: translate(-79.6%, 37%) rotate(3deg) scale(1.07) !important;
+}
+
+.main .character .character_img:active + .mlg_glasses {
+  transform: translate(-82%, 23%) rotate(3deg) scale(1.17) !important;
 }
