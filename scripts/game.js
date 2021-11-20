@@ -13,7 +13,7 @@ class Game {
       rampage: 2 
     };
     this.prices = {
-      click: 2.5,
+      click: 2,
       second: 1.7,
       rampage: 0.5 
     };
