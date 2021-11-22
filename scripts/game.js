@@ -96,7 +96,7 @@ class Game {
   loadGameObject() {
     this.score = JSON.parse(localStorage.getItem('score'));
     if (!this.score) {
-      let gameObject = JSON.parse(localStorage.getItem('gameObject'));
+      localStorage.setItem('score', JSON.stringify(this.score));
       this.score = gameObject.score;
       this.multipliers = gameObject.multipliers;
       this.settings = gameObject.settings;
