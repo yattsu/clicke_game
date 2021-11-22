@@ -29,26 +29,30 @@ class Game {
         name: 'Default',
         price: 10,
       },
-      tham: {
-        name: 'Tham Kench',
-        price: 10000000000,
-      },
-      aquaCat: {
-        name: 'Aqua Cat',
-        price: 10000000,
-      },
-      greenCat: {
-        name: 'Green Cat',
-        price: 10000001,
-      },
       peachCat: {
         name: 'Peach Cat',
         price: 10000000,
       },
+      aquaCat: {
+        name: 'Aqua Cat',
+        price: 70500000,
+      },
+      greenCat: {
+        name: 'Green Cat',
+        price: 500000000,
+      },
       goldCat: {
         name: 'Gold Cat',
-        price: 10000000,
-      }
+        price: 1000000000,
+      },
+      tham: {
+        name: 'Tham Kench',
+        price: 10000000000,
+      },
+      antimatterCat: {
+        name: 'Antimatter Cat',
+        price: 100000000000,
+      },
     }
     this.shop = new Shop(this);
 
