@@ -107,7 +107,6 @@ class Game {
   }
 
   saveGameObject = () => {
-    localStorage.setItem('gameObject', JSON.stringify(this));
     localStorage.setItem('score', JSON.stringify(this.score));
     localStorage.setItem('multipliers', JSON.stringify(this.multipliers));
     localStorage.setItem('settings', JSON.stringify(this.settings));
