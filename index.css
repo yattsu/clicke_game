@@ -138,6 +138,7 @@ body {
 .shop {
   display: flex;
   position: relative;
+  pointer-events: none;
   flex-direction: row;
   width: 100%;
   align-items: center;
@@ -151,6 +152,7 @@ body {
 .shop > .title {
   flex: 0;
   color: #eee;
+  pointer-events: all;
   cursor: pointer;
   margin-left: 1%;
   margin-right: 1%;
@@ -166,6 +168,7 @@ body {
 }
 
 .shop .menu {
+  pointer-events: none;
   display: flex;
   filter: opacity(0);
   flex-direction: column;
@@ -233,7 +236,7 @@ body {
   padding-left: 20px;
   padding-right: 20px;
   margin-right: 5px;
-  min-width: 350px;
+  min-width: 150px;
   height: 100%;
   font-size: 2.3vh;
   color: #eee;
@@ -263,8 +266,25 @@ body {
   color: #fffcd1;
 }
 
+.item .owned {
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.item img {
+  position: relative;
+  cursor: pointer;
+  pointer-events: fill;
+  flex: 1;
+  width: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: auto;
+  align-items: center;
+}
+
 .item .purchase {
-  pointer-events: all;
+  pointer-events: inherit;
   cursor: pointer;
   font-size: 2vh;
   flex: 0;

@@ -7,6 +7,8 @@ class Game {
     this.score = 0;
     this.rampage = false;
     this.rampageBonus = 0;
+    this.currentSkin = 'default';
+    this.ownedSkins = ['default'];
     this.multipliers = {
       click: 1,
       second: 0,
@@ -19,8 +21,38 @@ class Game {
     };
     this.settings = {
       tapSound: true,
-      music: true
+      music: true,
+      shit: 0
     };
+    this.skins = {
+      default: {
+        name: 'Default',
+        price: 10,
+      },
+      tham: {
+        name: 'Tham Kench',
+        price: 10000000000,
+      },
+      aquaCat: {
+        name: 'Aqua Cat',
+        price: 10000000,
+      },
+      greenCat: {
+        name: 'Green Cat',
+        price: 10000001,
+      },
+      peachCat: {
+        name: 'Peach Cat',
+        price: 10000000,
+      },
+      goldCat: {
+        name: 'Gold Cat',
+        price: 10000000,
+      }
+    }
+    this.shop = new Shop(this);
+
+    this.loadGameObject();
 
     //document.addEventListener('keyup', (e) => {
       //let element = document.querySelector('.character').click();
@@ -33,6 +65,7 @@ class Game {
     for (let i = 0; i < this.purchaseButtons.length; i++) {
       this.purchaseButtons[i].addEventListener('click', this.purchase);
     }
+    document.addEventListener('keydown', this.checkDebug);
 
     this.everySecond();
     this.comboRefresh();
@@ -56,17 +89,40 @@ class Game {
     }
   }
 
-  saveGameObject() {
-    localStorage.setItem('gameObject', JSON.stringify(this));
+  loadGameObject() {
+    this.score = JSON.parse(localStorage.getItem('score'));
+    if (!this.score) {
+      let gameObject = JSON.parse(localStorage.getItem('gameObject'));
+      this.score = gameObject.score;
+      this.multipliers = gameObject.multipliers;
+      this.settings = gameObject.settings;
+      this.currentSkin = gameObject.currentSkin;
+      return;
+    }
+
+    this.multipliers = JSON.parse(localStorage.getItem('multipliers'));
+    this.settings = JSON.parse(localStorage.getItem('settings'));
+    this.currentSkin = JSON.parse(localStorage.getItem('currentSkin'));
+    this.ownedSkins = JSON.parse(localStorage.getItem('ownedSkins'));
+  }
+
+  saveGameObject = () => {
+    //localStorage.setItem('gameObject', JSON.stringify(this));
+    localStorage.setItem('score', JSON.stringify(this.score));
+    localStorage.setItem('multipliers', JSON.stringify(this.multipliers));
+    localStorage.setItem('settings', JSON.stringify(this.settings));
+    localStorage.setItem('currentSkin', JSON.stringify(this.currentSkin));
+    localStorage.setItem('ownedSkins', JSON.stringify(this.ownedSkins));
   }
 
   everySecond() {
     setInterval(() => {
+      this.saveGameObject();
       this.updateScore();
       this.passiveIncrement();
       this.updatePrices();
-      this.saveGameObject();
       this.updatePageTitle();
+      this.updateSkin();
     }, 1000);
   }
 
@@ -114,7 +170,7 @@ class Game {
 
     let clientX = event.clientX;
     let clientY = event.clientY;
-    const floatingElement = new floatingText('+' + (this.multipliers.click + this.rampageBonus), clientX, clientY);
+    const floatingElement = new floatingText('+' + this.formatPts((this.multipliers.click + this.rampageBonus)), clientX, clientY);
   }
 
   playTap = (event) => {
@@ -138,8 +194,13 @@ class Game {
       case 'rampage':
         price = Math.floor(this.score * this.prices[id]);
         break;
-      default:
+      case 'click':
+      case 'second':
         price = this.flooredPow(this.multipliers[id], this.prices[id]);
+        break;
+      default:
+        price = this.skins[id].price;
+        break;
     }
 
     if (this.multipliers[id] == 0) {
@@ -147,6 +208,13 @@ class Game {
     }
 
     return price;
+  }
+
+  updateSkin() {
+    let characterImage = document.querySelector('.character_img');
+    if (characterImage.src !== `media/skins/${this.currentSkin}.png`) {
+      characterImage.src = `media/skins/${this.currentSkin}.png`;
+    }
   }
 
   updatePrices() {
@@ -164,9 +232,15 @@ class Game {
         const nextPrice = this.multipliers[id] == 0 ? this.formatPts((this.multipliers[id] + 1) * 2) : this.formatPts(this.multipliers[id] * 2);
 
         if (this.score < price) {
-          button.classList.add('disabled');
+          try {
+            button.classList.add('disabled');
+          }
+          catch(e) {}
         } else {
-          button.classList.remove('disabled');
+          try {
+            button.classList.remove('disabled');
+          }
+          catch {}
         }
 
         priceObj.innerHTML = `${this.formatPts(price)} pts`;
@@ -177,6 +251,10 @@ class Game {
         status.innerHTML = `Current: ${this.formatPts(this.multipliers[id])}<br> Next: ${nextPrice}`;
       }
     }
+  }
+
+  unlockSkin(id) {
+    this.skins[id].owned = true;
   }
 
   purchase = (event) => {
@@ -196,9 +274,12 @@ class Game {
       case 'rampage':
         this.enableRampage();
         break;
-      default:
+      case 'click':
+      case 'second':
         this.multipliers[id] *= 2;
         break;
+      default:
+        this.ownedSkins.push(id);
     }
   }
 
@@ -279,9 +360,3 @@ class floatingText {
 }
 
 let game = new Game();
-let savedGame = JSON.parse(localStorage.getItem('gameObject'));
-if (savedGame) {
-  game.score = savedGame.score;
-  game.multipliers = savedGame.multipliers;
-  game.settings = savedGame.settings;
-}
