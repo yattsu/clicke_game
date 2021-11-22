@@ -96,7 +96,6 @@ class Game {
       this.score = gameObject.score;
       this.multipliers = gameObject.multipliers;
       this.settings = gameObject.settings;
-      this.currentSkin = gameObject.currentSkin;
       return;
     }
 
